@@ -1,0 +1,65 @@
+#!/bin/bash
+
+if [ -z $1 ]; then
+        echo "$1 options not found!"
+        exit 1
+fi
+
+if [ -z $2 ]; then          
+        echo "$2 source dir not found!"
+        exit 1
+fi
+
+##########
+# install pip3 python
+##########
+
+python3 -c "import cld2" > /dev/null 2>&1
+retVal=$?
+if [ $retVal -eq 1 ]; then
+        CFLAGS="-Wno-narrowing" pip3 install cld2-cffi > /dev/null 2>&1
+fi
+
+python3 -c "import cython" > /dev/null 2>&1   
+retVal=$?
+if [ $retVal -eq 1 ]; then
+        pip3 install cython > /dev/null 2>&1
+fi
+
+
+python3 -c "import guidedlda" > /dev/null 2>&1
+retVal=$?
+if [ $retVal -eq 1 ]; then
+        git clone https://github.com/vi3k6i5/GuidedLDA > /dev/null 2>&1
+        cd GuidedLDA
+        make cython > /dev/null 2>&1
+        python3 setup.py clean > /dev/null 2>&1
+        python3 setup.py build_ext --inplace > /dev/null 2>&1
+        python3 setup.py install > /dev/null 2>&1
+        cd ..
+        rm -rf GuidedLDA
+fi
+
+SOURCE_DIR=$2
+
+if [ ! -f stage42 ]; then
+	./pipeline5.py ${SOURCE_DIR}
+fi
+
+case $1 in
+    languages)
+		./languages.py
+        ;;
+    news)
+        ./news.py
+        ;;
+    categories)
+		./categories.py
+        ;;
+    threads)
+		./thread.py
+        ;;
+    top)
+		./top.py
+        ;;
+esac
