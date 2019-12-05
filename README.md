@@ -21,3 +21,7 @@ The Task
 - Group similar news into threads. Your algorithm must identify news articles about the same event and group them together into threads, selecting a relevant title for each thread. News articles inside each thread must be sorted according to their relevance (most relevant at the top).
 
 - Sort threads by their relative importance. Your algorithm must sort news threads in each of the categories based on perceived importance (important at the top). In addition, the algorithm must build a global list of threads, indepedent of category, sorted by perceived importance (important at the top).
+
+***pipeline5.py***
+1. Get files from the source dir and create dataframe like this:
+    
