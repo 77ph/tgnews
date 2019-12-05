@@ -23,12 +23,12 @@ Data Clustering Contest: Round 1
 - Sort threads by their relative importance. Your algorithm must sort news threads in each of the categories based on perceived importance (important at the top). In addition, the algorithm must build a global list of threads, indepedent of category, sorted by perceived importance (important at the top).
 
 ***pipeline5.py***
--1 Get files from the source dir and create dataframe
--2 Detect english and russian files, using cld2 lib
--3 Perform preliminary clasterisation, using LDA method. Prepare labeled dataset for classification
--4 Use SGD Classifirer for traing and test data. Predict category for every document
--5 Use LDA again to detect threads and rank them for every category. Define category - "others" and define files with nesws.
--6 Save all data in two csv files - stage41.csv (eng) and stage42.csv (ru)
+- 1 Get files from the source dir and create dataframe
+- 2 Detect english and russian files, using cld2 lib
+- 3 Perform preliminary clasterisation, using LDA method. Prepare labeled dataset for classification
+- 4 Use SGD Classifirer for traing and test data. Predict category for every document
+- 5 Use LDA again to detect threads and rank them for every category. Define category - "others" and define files with nesws.
+- 6 Save all data in two csv files - stage41.csv (eng) and stage42.csv (ru)
 
 
 
