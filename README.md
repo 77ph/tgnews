@@ -33,9 +33,10 @@ Data Clustering Contest: Round 1
 ***languages.py news.py categories.py thread.py top.py***
 
 - All this files works with stage41.csv (eng) and stage42.csv (ru) and didn't need new calculation
-- Files created to satisfy telegram tech order and create json output like decribed in contest description
+- Files created to satisfy telegram tech order and create json output like described in contest description
 
 
-
+***tgnews***
+- Just satisfy telegram tech order. You  can simply start as ****python3 ./pipeline5.py '/source_dir_name'**** and receive the same     result. 
 
     
