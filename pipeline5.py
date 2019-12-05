@@ -23,7 +23,8 @@ import guidedlda
 import pickle
 
 CodeDir = os.path.dirname(os.path.realpath('pipeline6.py'))
-path=CodeDir+'/data2'
+path1 = sys.argv[1]
+path=CodeDir+path1
 
 fileout1='stage1.csv'
 fileout2='stage2.csv'
@@ -183,16 +184,16 @@ Economy =['economy', 'markets', 'finance', 'business']
 #Economy =['economy']
 Technology =['gadgets', 'auto', 'apps', 'crypto', 'blockchain','computer','technology','iphone','android','api','software']
 #Technology =['technology']
-Entertainment = ['entertainment','movie', 'music', 'game', 'book', 'art','film','rock','comedy','tv-show','hbo','disney','kino','teatr','kultura','paint']
+Entertainment = ['entertainment','movie', 'music', 'book', 'art','film','rock','comedy','tv-show','hbo','disney','kino','teatr','kultura']
 #Entertainment = ['entertainment']
-Sport=['sports','sport','football','hockey','cricket']
+Sport=['sports','football','hockey','cricket','sport','rugby','tennis','boxing','athletics','game','rfs','dynamo','spartak','match','games']
 #Sport=['sport']
-Science = ['science', 'biology', 'physics', 'genetics','math','chemistry']
+Science = ['science', 'biolog', 'physics', 'genetic','math','chemistry','nauka','genom','kosmos','nano']
 #Science = ['science']
 categories=[(1,'society'),(2,'economy'),(3,'technology'),(4,'entertainment'),(5,'science'),(6,'sport')]
 
 n_features = 1000
-n_components = 40
+n_components = 100
 n_top_words = 20
 ru=pd.read_csv('stops_ru.txt',header=None)
 russian=ru[0].tolist()
@@ -322,7 +323,7 @@ msk = np.random.rand(len(dft)) < 0.7
 train = dft[msk]
 test = dft[~msk]
 del dft
-
+print('size of the test data:',len(test))
 print("done test train data")
 
 SFD_clf = Pipeline([
@@ -629,49 +630,52 @@ for i in range(1,7):
                                 stop_words=russian2,
                                 )
     
-    tf = tf_vectorizer.fit_transform(data_samples)
+    try:
+        tf = tf_vectorizer.fit_transform(data_samples)
+    
 
     #filename_glda2 = 'glda_model2.sav'
-    print("train LDA with new data")
-    gLDA2 = guidedlda.GuidedLDA(n_topics=n_components, n_iter=100, random_state=7, refresh=20)
-    gLDA2.fit(tf)
+        print("train LDA with new data")
+        gLDA2 = guidedlda.GuidedLDA(n_topics=n_components, n_iter=100, random_state=7, refresh=20)
+        gLDA2.fit(tf)
 
     #gLDA2 = pickle.load(open(filename_glda2, 'rb'))
     #gLDA2.fit(tf)
 #    pickle.dump(gLDA2, open(filename_glda2, 'wb'))
 
 #    print("\nTopics in gLDA model:")
-    tf_feature_names = tf_vectorizer.get_feature_names()
-    print_top_words(gLDA2, tf_feature_names, n_top_words)
+        tf_feature_names = tf_vectorizer.get_feature_names()
+        print_top_words(gLDA2, tf_feature_names, n_top_words)
 
-    doc_topic = gLDA2.doc_topic_
+        doc_topic = gLDA2.doc_topic_
 
 #    for i in range(10):
 #        print("{} (top topic: {})".format([i], doc_topic[i].argmax()))
    
 
-    tlist=[]
+        tlist=[]
 
-    for i in range(len(dft)):
-        t2=doc_topic[i].argmax()
-        tlist.append(t2)
-        c=Counter(tlist).most_common()
-    dft.insert(loc=0, column='thread', value=tlist)
+        for i in range(len(dft)):
+            t2=doc_topic[i].argmax()
+            tlist.append(t2)
+            c=Counter(tlist).most_common()
+        dft.insert(loc=0, column='thread', value=tlist)
 
-    plist=[]
+        plist=[]
 
-    for i in range(len(dft)):
-        p1=doc_topic[i].max()
-        plist.append(p1)
-    dft.insert(loc=0, column='prob', value=plist)
+        for i in range(len(dft)):
+            p1=doc_topic[i].max()
+            plist.append(p1)
+        dft.insert(loc=0, column='prob', value=plist)
 
 
 
-    dft['rate_thread']=dft.apply(lambda row: rate_thread(row['thread'],c),axis=1)
-    dft['real_news']=dft.apply(lambda row: set_news(row['rate_thread'],len(tlist),row['news']),axis=1)
-    dft['theme']=dft.apply(lambda row: 7 if row['prob']  < 0.12 else row['theme'],axis=1)
-    dfo=dfo.append(dft)
-
+        dft['rate_thread']=dft.apply(lambda row: rate_thread(row['thread'],c),axis=1)
+        dft['real_news']=dft.apply(lambda row: set_news(row['rate_thread'],len(tlist),row['news']),axis=1)
+        dft['theme']=dft.apply(lambda row: 7 if row['prob']  < 0.12 else row['theme'],axis=1)
+        dfo=dfo.append(dft)
+    except:
+        print('russian traing dataset not enough for theme:', categories[i-1])
 dfo.to_csv('stage42.csv',mode='w')
 del dfo
 
