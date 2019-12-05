@@ -30,6 +30,10 @@ Data Clustering Contest: Round 1
 - 5 Use LDA again to detect threads and rank them for every category. Define category - "others" and define files with nesws.
 - 6 Save all data in two csv files - stage41.csv (eng) and stage42.csv (ru)
 
+***languages.py news.py categories.py thread.py top.py***
+
+- All this files works with stage41.csv (eng) and stage42.csv (ru) and didn't need new calculation
+- Files created to satisfy telegram tech order and create json output like decribed in contest description
 
 
 
