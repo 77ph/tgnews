@@ -22,7 +22,7 @@ from collections import Counter
 import guidedlda
 import pickle
 
-CodeDir = os.path.dirname(os.path.realpath('pipeline6.py'))
+CodeDir = os.path.dirname(os.path.realpath('pipeline5.py'))
 path1 = sys.argv[1]
 path=CodeDir+path1
 
