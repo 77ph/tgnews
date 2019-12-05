@@ -215,7 +215,7 @@ dfo['text']=df_en['text']
 dfo['title']=df_en['title']
 length=def_length(data_samples)
 del df_en
-dfo['length']=pd.Series(length)
+dfo['length']=length
 dfo['news']=def_news(url)
 dfo['sport']=def_theme(url,Sport)
 dfo['society']=def_theme(url,Society)
@@ -368,7 +368,7 @@ dfo['text']=df_ru['text']
 dfo['title']=df_ru['title']
 length=def_length(data_samples)
 del df_ru
-dfo['length']=pd.Series(length)
+dfo['length']=length
 dfo['news']=def_news(url)
 dfo['sport']=def_theme(url,Sport)
 dfo['society']=def_theme(url,Society)
