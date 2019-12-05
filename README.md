@@ -27,7 +27,7 @@ Data Clustering Contest: Round 1
 - 2 Detect english and russian files, using cld2 lib
 - 3 Perform preliminary clasterisation, using LDA method. Prepare labeled dataset for classification
 - 4 Use SGD Classifirer for traing and test data. Predict category for every document
-- 5 Use LDA again to detect threads and rank them for every category. Define category - "others" and define files with nesws.
+- 5 Use LDA again to detect threads and rank them for every category. Define category - "others" and define files with news.
 - 6 Save all data in two csv files - stage41.csv (eng) and stage42.csv (ru)
 
 ***languages.py news.py categories.py thread.py top.py***
