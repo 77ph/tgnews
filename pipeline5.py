@@ -184,11 +184,11 @@ Economy =['economy', 'markets', 'finance', 'business']
 #Economy =['economy']
 Technology =['gadgets', 'auto', 'apps', 'crypto', 'blockchain','computer','technology','iphone','android','api','software']
 #Technology =['technology']
-Entertainment = ['entertainment','movie', 'music', 'book', 'art','film','rock','comedy','tv-show','hbo','disney','kino','teatr','kultura']
+Entertainment = ['entertainment','movies', 'music', 'art','film','comedy','tv-show','disney','kino','teatr','kultura']
 #Entertainment = ['entertainment']
-Sport=['sports','football','hockey','cricket','sport','rugby','tennis','boxing','athletics','game','rfs','dynamo','spartak','match','games']
+Sport=['sports','football','hockey','cricket','sport','rugby','tennis','athletics','dynamo','spartak']
 #Sport=['sport']
-Science = ['science', 'biolog', 'physics', 'genetic','math','chemistry','nauka','genom','kosmos','nano']
+Science = ['science', 'biolog', 'physics', 'genetic','chemistry','nauka','genom','kosmos']
 #Science = ['science']
 categories=[(1,'society'),(2,'economy'),(3,'technology'),(4,'entertainment'),(5,'science'),(6,'sport')]
 
@@ -402,7 +402,7 @@ russian2=r[0].tolist()
 tfru_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
                                 max_features=n_features,
                                 token_pattern=r"(?u)\b\w+\b",
-                                stop_words=russian2)
+                                stop_words=russian)
 tfru = tfru_vectorizer.fit_transform(data_samples)
 gLDAru =  guidedlda.GuidedLDA(n_topics=n_components, n_iter=100, random_state=7, refresh=20)
 
@@ -598,7 +598,7 @@ del dfo
 
 print("treat russian part")
 n_features = 1000
-n_top_words = 5
+n_top_words = 20
 
 r=pd.read_csv('stops_ru2.txt',header=None)
 russian2=r[0].tolist()
@@ -627,8 +627,7 @@ for i in range(1,7):
     tf_vectorizer = CountVectorizer(max_df=0.95, min_df=2,
                                 decode_error='ignore',
                                 max_features=n_features,
-                                stop_words=russian2,
-                                )
+                                stop_words=russian)
     
     try:
         tf = tf_vectorizer.fit_transform(data_samples)
