@@ -26,9 +26,9 @@ Query OK, 1 row affected (0.463 sec)
 
 MariaDB [(none)]> exit
 
-https://github.com/PyMySQL/PyMySQL
-python3 -m pip install PyMySQL
-
+# https://github.com/PyMySQL/PyMySQL
+pip3 install PyMySQL
+pip3 install sqlalchemy
 
 """
 
