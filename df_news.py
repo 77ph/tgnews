@@ -30,6 +30,9 @@ MariaDB [(none)]> exit
 pip3 install PyMySQL
 pip3 install sqlalchemy
 
+https://docs.sqlalchemy.org/en/13/core/type_basics.html#module-sqlalchemy.types
+https://dev.mysql.com/doc/refman/8.0/en/data-types.html
+
 """
 
 import os
