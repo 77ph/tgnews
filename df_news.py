@@ -43,13 +43,15 @@ import pandas as pd
 #import mysql.connector as mysql
 
 import sqlalchemy
-import time
 import numpy as np
+import time
 
 # path = '/home/innerm/ML/data2'
 path = './20200503'
-fileout='stage1.csv'
+stage = 'stage1'
+fileout= stage + '.csv'
 files = []
+
 # r=root, d=directories, f = files
 for r, d, f in os.walk(path):
     for file in f:
@@ -65,6 +67,8 @@ time_list=[]
 text_list=[]
 
 files1=files
+
+mytime = time.process_time()
 
 for fname in files1:
     with open(fname, "r") as f:
@@ -106,38 +110,62 @@ for fname in files1:
         else:
             pubtime_list.append(0)
     
-        time = soup.find("time")
-        if time:
-            time_list.append(time['datetime'])
+        souptime = soup.find("time")
+        if souptime:
+            time_list.append(souptime['datetime'])
         else:
             time_list.append(0)
 
 #df=pd.read_csv('files_by_lang-cld2.csv')
 #df_en=df[df['lang']==1]
+
 df=pd.DataFrame()
 
-df['files']=pd.Series(files1) 
-df['url']=pd.Series(url_list) 
+df['files']=pd.Series(files1)
+df['url']=pd.Series(url_list)
 df['site_name']=pd.Series(site_name_list)    
 df['title']=pd.Series(title_list)
 df['desc']=pd.Series(desc_list) 
-df['pubtime']=pd.Series(pubtime_list)    
-df['time']=pd.Series(time_list)   
+df['pubtime']=pd.Series(pubtime_list)
+df['time']=pd.Series(time_list)
 df['text']=pd.Series(text_list)
-    
+
+
+print("Total dir read to df seconds ",time.process_time() - mytime)
+
+mytime = time.process_time()
+
 df.to_csv(fileout,mode='w')
+
+print("Total df to .csv seconds ",time.process_time() - mytime)
 
 database_username = 'tgnews'
 database_password = '123456'
 database_ip       = '127.0.0.1'
 database_name     = 'tgnews'
 
+#engine = sqlalchemy.create_engine('mysql+mysqlconnector://{0}:{1}@{2}/{3}'.format(database_username, database_password, database_ip, database_name),pool_recycle=1)
+
+mytime = time.process_time()
+
 engine = sqlalchemy.create_engine('mysql+pymysql://{0}:{1}@{2}/{3}'.format(database_username, database_password, database_ip, database_name),pool_recycle=1)
 
 # [SQL: INSERT INTO table_name_for_df (`index`, files, url, site_name, title, `desc`, pubtime, time, text) VALUES (%(index)s, %(files)s, %(url)s, %(site_name)s, %(title)s, %(desc)s, %(pubtime)s, %(time)s, %(text)s)]
 # 'pubtime': '2020-05-03T05:20:00+00:00', 'time': '2020-05-03T05:20:00+00:00'
-df.to_sql(con=engine, name='table_name_for_df', if_exists='replace', chunksize=20000, 
+df.to_sql(con=engine, name=stage, if_exists='replace', chunksize=20000, 
 dtype={'files': sqlalchemy.types.NVARCHAR(length=255), 'url': sqlalchemy.types.NVARCHAR(length=4096),'site_name': sqlalchemy.types.NVARCHAR(length=255),'title': sqlalchemy.types.Text,
 'desc': sqlalchemy.types.Text, pubtime: sqlalchemy.types.Text, 'time': sqlalchemy.types.Text, 'text': sqlalchemy.types.Text(length=4294000000)})
 
+print("Total df to mysql seconds ",time.process_time() - mytime)
+
 print("Export: OK")
+
+mytime = time.process_time()
+
+SQL_Query = "select * from stage1"
+df1 = pd.read_sql_query(SQL_Query, engine)
+print (df1)
+
+print("Total mysql to df seconds ",time.process_time() - mytime)
+
+print("Import: OK")
