@@ -133,6 +133,15 @@ df['text']=pd.Series(text_list)
 
 print("Total dir read to df seconds ",time.process_time() - mytime)
 
+dataTypeObj = df.dtypes['pubtime']
+ 
+print('Data type of pubtime column in the Dataframe :',dataTypeObj)
+
+dataTypeObj = df.dtypes['time']
+ 
+print('Data type of pubtime column in the Dataframe :',dataTypeObj) 
+
+
 mytime = time.process_time()
 
 df.to_csv(fileout,mode='w')
@@ -162,10 +171,41 @@ print("Export: OK")
 
 mytime = time.process_time()
 
-SQL_Query = "select * from stage1"
-df1 = pd.read_sql_query(SQL_Query, engine)
-print (df1)
+### options 1 with chunksize
+### Achtung! https://stackoverflow.com/questions/31837979/pandas-sql-chunksize/31839639#31839639 - result is "iterator of multiple dataframes."
+res = pd.read_sql_table(stage,
+                        con=engine,
+                        index_col='index',
+                        coerce_float=True,
+                        columns=['files',
+                                    'url',
+                                    'site_name',
+                                    'title',
+                                    'desc',
+                                    'pubtime',
+                                    'time',
+                                    'text'],
+### Need if pubtime or time datetime type, not just text
+#                           parse_dates=['pubtime',
+#                                        'time']
+                        chunksize=20000)
+for df1 in res:
+    print(df1)
 
-print("Total mysql to df seconds ",time.process_time() - mytime)
+del res
+del df1
+
+mytime = time.process_time()
+
+print("Total mysql to df seconds [options 1]",time.process_time() - mytime)
+
+#### options 2 with SQL_Query without "pandas" chunksize
+SQL_Query = "select * from " + stage
+#SQL_Query = "select files,url from " + stage
+df1 = pd.read_sql_query(SQL_Query, engine)
+
+print(df1)
+
+print("Total mysql to df seconds [options 2]",time.process_time() - mytime)
 
 print("Import: OK")
